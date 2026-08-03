@@ -1,0 +1,10 @@
+﻿Metric,Value
+Final gym records,190
+Fresh SerpApi API calls attempted,190
+Fresh SerpApi OK responses,80
+Fresh strong/likely matches applied,72
+Fresh weak/uncertain results requiring manual review,8
+Rows blocked by SerpApi quota exhaustion,110
+Rated records after applying fresh matches and prior cache,158
+Fit4Less records,19
+Windsor Fit4Less records,3

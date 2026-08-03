@@ -1,25 +1,59 @@
 # Ontario Gym Opportunity Dashboard
 
+Prepared by **Pradeepta Kumar Saha**  
+Student ID: **110194567**
+
 Interactive regional-manager dashboard for evaluating gym expansion opportunities across selected Ontario market zones.
 
-## Files
+## Final dashboard links
 
-- `index.html` — standalone dashboard with embedded data, charts, maps, methodology, citations, and AI-use statement.
-- `data/final-project-presentation.pptx` — final presentation deck with dashboard screenshot, hosted link, limitations, references, and data dictionary appendix.
-- `data/final-fresh-crossmatched-gym-location-database.xlsx` — final packaged workbook for review.
-- `data/dataset-c-final-fresh-crossmatched-gym-locations.csv` — final gym location dataset.
-- `data/dataset-d-final-fresh-crossmatched-market-zone-summary.csv` — final market-zone competition summary.
+- Vercel dashboard: https://ontario-gym-opportunity-dashboard.vercel.app/
+- Final ChatGPT/Sites dashboard: https://ontario-gym-opportunity-dashboard.pradeepta07.chatgpt.site/
 
-## Live dashboard
+## Repository structure
 
-Primary hosted dashboard:
+```text
+ontario-gym-opportunity-dashboard/
+├── scripts/
+│   ├── census.py
+│   └── gym.py
+├── database/
+│   ├── dataset-a-da-demographics.csv
+│   ├── dataset-a-market-zone-da-mapping.csv
+│   ├── dataset-b-market-zone-demographics.csv
+│   ├── dataset-c-final-gym-locations.csv
+│   ├── dataset-d-market-zone-competition-summary.csv
+│   ├── dataset-e-top-gym-websites.csv
+│   ├── dataset-f-amenities-fees-links.csv
+│   ├── dataset-g-pricing-pages.csv
+│   ├── dataset-h-official-fee-research.csv
+│   ├── dataset-i-monthly-fee-summary.csv
+│   ├── dataset-j-brand-fees-amenities-manual.csv
+│   └── other supporting CSV/XLSX audit and workbook files
+├── presentation/
+│   └── final-project-presentation.pptx
+├── index.html
+├── README.md
+├── technical-report.md
+├── ai-prompts.md
+└── dashboard.md
+```
 
-https://ontario-gym-opportunity-dashboard.pradeepta07.chatgpt.site/
+## Project purpose
 
-GitHub repository:
+The project screens gym expansion opportunities across 12 Ontario municipalities. It combines market-zone demographics, competitor gym supply, ratings/reviews, pricing, amenities, and opportunity scoring to help identify strong candidate zones for a new gym location.
 
-https://github.com/pradeepa29/ontario-gym-opportunity-dashboard
+## Main files
 
-## Notes
+- `index.html` — standalone interactive dashboard.
+- `database/` — all datasets used in the dashboard development process.
+- `scripts/census.py` — census and market-zone data QA helper.
+- `scripts/gym.py` — gym competitor, amenities, and pricing data QA helper.
+- `technical-report.md` — written technical report.
+- `ai-prompts.md` — AI-use statement and prompt disclosure.
+- `dashboard.md` — guide to interpreting the dashboard.
+- `presentation/final-project-presentation.pptx` — final presentation deck.
 
-The dashboard is designed for academic and screening analysis. Market-zone boundaries are project-defined approximations and should be validated with local real-estate, traffic, lease, and operator data before any real business decision.
+## Academic note
+
+This dashboard is designed for academic and screening analysis. Market-zone boundaries are project-defined approximations and should be validated with local real-estate, traffic, lease, parking, zoning, and operator data before any real business decision.
