@@ -10,33 +10,37 @@ Interactive regional-manager dashboard for evaluating gym expansion opportunitie
 - Vercel dashboard: https://ontario-gym-opportunity-dashboard.vercel.app/
 - Final ChatGPT/Sites dashboard: https://ontario-gym-opportunity-dashboard.pradeepta07.chatgpt.site/
 
+## Repository name
+
+The repository is named **8730-project** to match the project requirement.
+
 ## Repository structure
 
 ```text
-ontario-gym-opportunity-dashboard/
-├── scripts/
-│   ├── census.py
-│   └── gym.py
-├── database/
-│   ├── dataset-a-da-demographics.csv
-│   ├── dataset-a-market-zone-da-mapping.csv
-│   ├── dataset-b-market-zone-demographics.csv
-│   ├── dataset-c-final-gym-locations.csv
-│   ├── dataset-d-market-zone-competition-summary.csv
-│   ├── dataset-e-top-gym-websites.csv
-│   ├── dataset-f-amenities-fees-links.csv
-│   ├── dataset-g-pricing-pages.csv
-│   ├── dataset-h-official-fee-research.csv
-│   ├── dataset-i-monthly-fee-summary.csv
-│   ├── dataset-j-brand-fees-amenities-manual.csv
-│   └── other supporting CSV/XLSX audit and workbook files
-├── presentation/
-│   └── final-project-presentation.pptx
-├── index.html
-├── README.md
-├── technical-report.md
-├── ai-prompts.md
-└── dashboard.md
+8730-project/
+|-- scripts/
+|   |-- census.py
+|   `-- gym.py
+|-- database/
+|   |-- dataset-a-da-demographics.csv
+|   |-- dataset-a-market-zone-da-mapping.csv
+|   |-- dataset-b-market-zone-demographics.csv
+|   |-- dataset-c-final-gym-locations.csv
+|   |-- dataset-d-market-zone-competition-summary.csv
+|   |-- dataset-e-top-gym-websites.csv
+|   |-- dataset-f-amenities-fees-links.csv
+|   |-- dataset-g-pricing-pages.csv
+|   |-- dataset-h-official-fee-research.csv
+|   |-- dataset-i-monthly-fee-summary.csv
+|   |-- dataset-j-brand-fees-amenities-manual.csv
+|   `-- other supporting CSV/XLSX audit and workbook files
+|-- presentation/
+|   `-- final-project-presentation.pptx
+|-- index.html
+|-- README.md
+|-- technical-report.md
+|-- ai-prompts.md
+`-- dashboard.md
 ```
 
 ## Project purpose
@@ -45,14 +49,14 @@ The project screens gym expansion opportunities across 12 Ontario municipalities
 
 ## Main files
 
-- `index.html` — standalone interactive dashboard.
-- `database/` — all datasets used in the dashboard development process.
-- `scripts/census.py` — census and market-zone data QA helper.
-- `scripts/gym.py` — gym competitor, amenities, and pricing data QA helper.
-- `technical-report.md` — written technical report.
-- `ai-prompts.md` — AI-use statement and prompt disclosure.
-- `dashboard.md` — guide to interpreting the dashboard.
-- `presentation/final-project-presentation.pptx` — final presentation deck.
+- `index.html` - standalone interactive dashboard.
+- `database/` - all datasets used in the dashboard development process.
+- `scripts/census.py` - census and market-zone data QA helper.
+- `scripts/gym.py` - gym competitor, amenities, and pricing data QA helper.
+- `technical-report.md` - written technical report.
+- `ai-prompts.md` - AI-use statement and prompt disclosure.
+- `dashboard.md` - guide to interpreting the dashboard.
+- `presentation/final-project-presentation.pptx` - final presentation deck.
 
 ## Academic note
 
