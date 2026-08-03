@@ -3,7 +3,6 @@
 ## Final dashboard links
 
 - Vercel: https://ontario-gym-opportunity-dashboard.vercel.app/
-- ChatGPT/Sites final version: https://ontario-gym-opportunity-dashboard.pradeepta07.chatgpt.site/
 
 ## What the dashboard does
 
