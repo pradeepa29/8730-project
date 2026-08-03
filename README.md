@@ -5,9 +5,20 @@ Interactive regional-manager dashboard for evaluating gym expansion opportunitie
 ## Files
 
 - `index.html` — standalone dashboard with embedded data, charts, maps, methodology, citations, and AI-use statement.
+- `data/final-project-presentation.pptx` — final presentation deck with dashboard screenshot, hosted link, limitations, references, and data dictionary appendix.
 - `data/final-fresh-crossmatched-gym-location-database.xlsx` — final packaged workbook for review.
 - `data/dataset-c-final-fresh-crossmatched-gym-locations.csv` — final gym location dataset.
 - `data/dataset-d-final-fresh-crossmatched-market-zone-summary.csv` — final market-zone competition summary.
+
+## Live dashboard
+
+Primary hosted dashboard:
+
+https://ontario-gym-opportunity-dashboard.pradeepta07.chatgpt.site/
+
+GitHub repository:
+
+https://github.com/pradeepa29/ontario-gym-opportunity-dashboard
 
 ## Notes
 

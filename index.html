@@ -495,6 +495,104 @@ button:hover {
   text-align: right;
 }
 
+.price-gap-chart {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 14px;
+  align-items: end;
+  min-height: 280px;
+  padding-top: 10px;
+}
+
+.price-gap-bar {
+  display: grid;
+  grid-template-rows: 34px 190px auto;
+  gap: 8px;
+  min-width: 112px;
+}
+
+.price-gap-value {
+  font-weight: 900;
+  color: var(--brand-dark);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.price-gap-track {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 190px;
+  border-radius: 14px;
+  background: #e8eef6;
+  overflow: hidden;
+}
+
+.price-gap-fill {
+  width: 72%;
+  min-height: 8px;
+  border-radius: 14px 14px 0 0;
+  background: linear-gradient(180deg, var(--accent), var(--brand));
+}
+
+.price-gap-fill.lowest {
+  background: linear-gradient(180deg, #f6c453, #d9793d);
+}
+
+.price-gap-label {
+  display: grid;
+  gap: 3px;
+  text-align: center;
+}
+
+.price-gap-label strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.price-gap-label span {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.amenity-mini {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 6px;
+}
+
+.amenity-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 3px 7px;
+  background: #edf7fa;
+  color: var(--brand-dark);
+  font-size: 0.7rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.amenity-chip.no {
+  background: #f7e3df;
+  color: #9f341f;
+}
+
+.amenity-chip.varies {
+  background: var(--soft-orange);
+  color: var(--warn);
+}
+
+.price-note {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
 .scatter-svg {
   width: 100%;
   height: auto;
@@ -1032,6 +1130,17 @@ tbody tr:hover {
       <section class="panel table-panel">
         <div class="panel-header">
           <div>
+            <p class="eyebrow">Pricing comparison</p>
+            <h2>Monthly price gap among visible competitors</h2>
+          </div>
+          <span class="badge warning">Manual Excel fee data</span>
+        </div>
+        <div class="chart-box" id="visiblePriceChart"></div>
+      </section>
+
+      <section class="panel table-panel">
+        <div class="panel-header">
+          <div>
             <p class="eyebrow">Gym Records</p>
             <h2>Competitor locations in view</h2>
           </div>
@@ -1045,6 +1154,7 @@ tbody tr:hover {
                 <th>Brand</th>
                 <th>Address</th>
                 <th>Type</th>
+                <th>Monthly Price / Amenities</th>
                 <th>Municipality</th>
                 <th>Market Zone</th>
                 <th>Training</th>
@@ -1076,6 +1186,19 @@ const state = {
 
 let zoneMap;
 let mapLayers;
+
+const brandAmenityProfiles = {
+  "GoodLife Fitness": { monthly: 35, training: "Yes", classes: "Yes", access24: "Location-specific", tanning: "Yes", hydro: "Yes", sauna: "Yes", tier: "Mid / Premium" },
+  "Fit4Less": { monthly: 15.98, training: "No", classes: "No", access24: "Yes", tanning: "Yes", hydro: "Yes", sauna: "No", tier: "Budget" },
+  "Planet Fitness": { monthly: 15, training: "Yes", classes: "No", access24: "No", tanning: "Yes", hydro: "Yes", sauna: "No", tier: "Budget" },
+  "Anytime Fitness": { monthly: null, training: "Yes", classes: "Yes", access24: "Yes", tanning: "Location-specific", hydro: "No", sauna: "No", tier: "Mid" },
+  "Crunch Fitness": { monthly: 15.99, training: "Yes", classes: "Yes", access24: "No", tanning: "Yes", hydro: "Yes", sauna: "Yes", tier: "Budget / Mid" },
+  "Orangetheory Fitness": { monthly: 69, training: "Yes", classes: "Yes", access24: "No", tanning: "No", hydro: "No", sauna: "No", tier: "Premium" },
+  "F45 Training": { monthly: null, training: "Unknown", classes: "Yes", access24: "No", tanning: "Yes", hydro: "No", sauna: "No", tier: "Premium / Specialty" },
+  "Movati Athletic": { monthly: 70, training: "Yes", classes: "Yes", access24: "No", tanning: "Yes", hydro: "Yes", sauna: "Yes", tier: "Premium" },
+  "LA Fitness": { monthly: 35, training: "Yes", classes: "Yes", access24: "No", tanning: "No", hydro: "No", sauna: "No", tier: "Mid / Premium" },
+  "World Gym": { monthly: null, training: "Unknown", classes: "Unknown", access24: "Unknown", tanning: "Unknown", hydro: "Unknown", sauna: "Unknown", tier: "Budget / Mid" },
+};
 
 const coverageLookup = {
   "Barrie||Northwest Barrie": "Sunnidale, Letitia Heights, northwest residential areas, and nearby Bayfield Street corridors.",
@@ -1521,6 +1644,23 @@ function renderReviewCoverageChart(zones, gyms) {
     : emptyChart("No visible gym records for review coverage.");
 }
 
+function visiblePriceItems(gyms) {
+  const byBrand = new Map();
+  for (const gym of gyms) {
+    const profile = brandProfile(gym.Brand);
+    if (!profile || !profile.monthly) continue;
+    if (!byBrand.has(gym.Brand)) byBrand.set(gym.Brand, { count: 0, monthly: profile.monthly, tier: profile.tier });
+    byBrand.get(gym.Brand).count += 1;
+  }
+  return [...byBrand.entries()]
+    .map(([brand, item]) => ({
+      label: brand,
+      fullLabel: `${brand}: ${currency.format(item.monthly)} monthly, ${item.count} visible location${item.count === 1 ? "" : "s"}, ${item.tier}`,
+      value: item.monthly,
+    }))
+    .sort((a, b) => a.value - b.value);
+}
+
 function renderIncomeOpportunityChart(zones) {
   const points = zones
     .map((row) => ({
@@ -1698,8 +1838,83 @@ function renderZoneTable(zones) {
     .join("");
 }
 
+function amenityClass(value) {
+  const text = String(value || "Unknown").toLowerCase();
+  if (text === "yes") return "";
+  if (text === "no") return " no";
+  return " varies";
+}
+
+function amenityLabel(shortLabel, value) {
+  const text = value || "Unknown";
+  const suffix = text === "Yes" ? "" : text === "No" ? ": No" : ": varies";
+  return `<span class="amenity-chip${amenityClass(text)}">${shortLabel}${suffix}</span>`;
+}
+
+function brandProfile(brand) {
+  return brandAmenityProfiles[brand] || null;
+}
+
+function priceAmenityHtml(row) {
+  const profile = brandProfile(row.Brand);
+  if (!profile) {
+    return `<span class="price-note">Fee not entered for this brand/local gym.</span>`;
+  }
+  const price = profile.monthly ? currency.format(profile.monthly) : "Fee not entered";
+  return `
+    <strong>${price}${profile.monthly ? " / month" : ""}</strong>
+    <span class="price-note">${plain(profile.tier)} brand-level manual comparison</span>
+    <div class="amenity-mini">
+      ${amenityLabel("PT", profile.training)}
+      ${amenityLabel("Classes", profile.classes)}
+      ${amenityLabel("24/7", profile.access24)}
+      ${amenityLabel("Tan", profile.tanning)}
+      ${amenityLabel("Hydro", profile.hydro)}
+      ${amenityLabel("Sauna", profile.sauna)}
+    </div>
+  `;
+}
+
+function manualTrainingHtml(row) {
+  const profile = brandProfile(row.Brand);
+  const value = profile ? profile.training : null;
+  if (!value || value === "Unknown") return `<span class="amenity-chip varies">Not entered</span>`;
+  return `<span class="amenity-chip${amenityClass(value)}">${plain(value)}</span><span class="price-note">Manual Excel data</span>`;
+}
+
+function renderVisiblePriceChart(gyms) {
+  const items = visiblePriceItems(gyms);
+  const minPrice = items.length ? Math.min(...items.map((item) => item.value)) : 0;
+  const maxPrice = items.length ? Math.max(...items.map((item) => item.value)) : 1;
+  $("visiblePriceChart").innerHTML = `
+    <p class="muted" style="margin-top:0">This bar chart uses monthly fee values from your manual Excel sheet. The yellow/orange bar is the cheapest visible competitor; the gap label shows how much higher each brand is per month.</p>
+    ${
+      items.length
+        ? `<div class="price-gap-chart">${items
+            .map((item) => {
+              const gap = item.value - minPrice;
+              const height = Math.max(6, (item.value / Math.max(1, maxPrice)) * 100);
+              const isLowest = gap === 0;
+              return `
+                <div class="price-gap-bar" title="${plain(item.fullLabel)}">
+                  <div class="price-gap-value">${currency.format(item.value)}</div>
+                  <div class="price-gap-track"><div class="price-gap-fill ${isLowest ? "lowest" : ""}" style="height:${height}%"></div></div>
+                  <div class="price-gap-label">
+                    <strong>${plain(item.label)}</strong>
+                    <span>${isLowest ? "Lowest price" : `+${currency.format(gap)} gap`}</span>
+                  </div>
+                </div>
+              `;
+            })
+            .join("")}</div>`
+        : `<p class="muted">No monthly prices entered for the competitors currently in view.</p>`
+    }
+  `;
+}
+
 function renderGymTable(gyms) {
   $("gymCountLabel").textContent = `${gyms.length} rows`;
+  renderVisiblePriceChart(gyms);
   $("gymTable").querySelector("tbody").innerHTML = gyms
     .sort((a, b) => sortText(a.Municipality + a.Market_Zone + a.Brand, b.Municipality + b.Market_Zone + b.Brand))
     .slice(0, 160)
@@ -1717,9 +1932,10 @@ function renderGymTable(gyms) {
           <td>${row.Brand}</td>
           <td>${row.Address || "Address not collected"}</td>
           <td>${row.Parent_Category}</td>
+          <td>${priceAmenityHtml(row)}</td>
           <td>${row.Municipality}</td>
           <td>${zoneDisplayName(row)}</td>
-          <td>${row.Personal_Training}</td>
+          <td>${manualTrainingHtml(row)}</td>
           <td>${row.Google_Rating ? `${row.Google_Rating} (${row.Google_Review_Count})` : "Not collected"}</td>
           <td>${plain(verification)}<br>${rowLevel ? `<small>${plain(rowLevel)}</small><br>` : ""}<a class="verify-link" href="https://www.google.com/maps/search/?api=1&query=${query}" target="_blank" rel="noopener">Verify on Google Maps</a><br><small>${plain(source)}</small></td>
         </tr>
